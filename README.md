@@ -11,3 +11,6 @@ https://aws.amazon.com/blogs/compute/dynamic-github-actions-with-aws-lambda/
 1. Wire up a github webhook to call SNS.
 2. SNS will relay to AWS Lambda.
 3. Lambda will process the data and decide if s3 needs to be updated.
+
+
+AWS credz are .gitignored && stored in config/aws.config.js
