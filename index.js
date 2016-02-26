@@ -19,42 +19,30 @@ exports.handler = function(event, context) {
   .then(function(results){
     var s3Files = results[0];
     var ghFiles = results[1];
-
     var promises = [];
     var diff = _.difference(s3Files, ghFiles);
-
-
+    diff.forEach(function(file){
+      var promise = s3.deleteObject(file);
+      promises.push(promise);
+    });
     ghFiles.forEach(function(file){
       var promise = gh.getFile({path: file});
       promises.push(promise);
     });
-
-    Promise.all(promises)
-    .then(function(files){
-      var promises = [];
-
-      files.forEach(function(file){
-        var promise = s3.upload(file);
-        promises.push(promise);
-      });
-
-      diff.forEach(function(file){
-        var promise = s3.deleteObject(file);
-        promises.push(promise);
-      });
-
-      Promise.all(promises)
-      .then(function(data){
-        context.succeed({data: data, deletedFiles: diff});
-      })
-      .catch(function(err){
-        console.log(err);
-      });
-
-    }).catch(function(err){
-      console.log(err);
+    return Promise.all(promises);
+  })
+  .then(function(files){
+    var promises = [];
+    files.forEach(function(file){
+      var promise = s3.upload(file);
+      promises.push(promise);
     });
-  }).catch(function(err){
+    return Promise.all(promises);
+  })
+  .then(function(data){
+    context.succeed(data);
+  })
+  .catch(function(err){
     console.log(err);
   });
 
