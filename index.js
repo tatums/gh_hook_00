@@ -7,16 +7,7 @@ exports.handler = function(event, context) {
   var body = JSON.parse(message);
   var Promise = require("bluebird");
 
-  // Get all github files;
-  // Get all s3 objects
-  // iterate over github files and fire off update on match of s3 object. (pop matched items)
-  // delete any remaiders.
-
-  Promise.all([
-    s3.allPaths(),
-    gh.allPaths()
-  ])
-  .then(function(results){
+  function deleteAndGetContents(results) {
     var s3Files = results[0];
     var ghFiles = results[1];
     var promises = [];
@@ -30,15 +21,27 @@ exports.handler = function(event, context) {
       promises.push(promise);
     });
     return Promise.all(promises);
-  })
-  .then(function(files){
+  };
+
+  function uploadToS3(files) {
     var promises = [];
     files.forEach(function(file){
       var promise = s3.upload(file);
       promises.push(promise);
     });
     return Promise.all(promises);
-  })
+  }
+
+  // Get a listing of github files && s3 objects;
+  // get contents from github and delete any s3 deletions
+  // delete any remaiders.
+
+  Promise.all([
+    s3.allPaths(),
+    gh.allPaths()
+  ])
+  .then(deleteAndGetContents)
+  .then(uploadToS3)
   .then(function(data){
     context.succeed(data);
   })
