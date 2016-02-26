@@ -14,3 +14,12 @@ https://aws.amazon.com/blogs/compute/dynamic-github-actions-with-aws-lambda/
 
 
 AWS credz are .gitignored && stored in config/aws.config.js
+
+
+## Test
+
+There is a test.js file where you can simulate the lambda call
+
+```javascript
+node test.js
+```

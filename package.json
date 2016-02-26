@@ -4,22 +4,17 @@
   "description": "On a push to master update an s3 bucket.",
   "main": "index.js",
   "scripts": {
-    "run": "node index.js",
-    "start": "node server.js"
+    "run": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async": "^1.5.2",
     "aws-sdk": "^2.2.37",
-    "body-parser": "^1.15.0",
-    "es6-promise": "^3.1.2",
+    "bluebird": "^3.3.1",
     "lodash": "^4.5.0",
     "mime-types": "^2.1.10",
-    "octonode": "^0.7.4",
-    "q": "^1.4.1"
+    "octonode": "^0.7.4"
   },
   "devDependencies": {
-    "express": "^4.13.4"
   }
 }

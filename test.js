@@ -7,9 +7,9 @@ event = {"Records": [
   }
 ]}
 context = {
-  succeed: function(){
-    console.log('succeed!!!!')
+  succeed: function(msg){
+    console.log(msg)
   }
 };
 
-var x = index.handler(event, context);
+index.handler(event, context);
